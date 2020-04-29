@@ -34,17 +34,10 @@
           value: "mallarme.json",
         },
       ]);
-      this.blacklist = ko.observable("div, body, text, p");
       this.currentModes = ko.observableArray([]);
       this.userGuid = "abcd-efgh-ijkl-mnop";
       this.viewer = ko.observable();
       this.editor = null; // Instantiated in setupEditor()
-      this.checkbox = {
-        expansions: ko.observable(true),
-      };
-      this.checkbox.expansions.subscribe(function () {
-        return _this.showHideExpansions();
-      });
     }
     Model.prototype.applyBindings = function (node) {
       ko.applyBindings(this, node);
@@ -108,32 +101,9 @@
           process(value);
         },
         onCharacterAdded: function (current, editor) {
-          console.log(current, editor);
           // console.log({ current, editor });
-          var getPrevious = (span) => span.previousElementSibling;
-          var getNext = (span) => span.nextElementSibling;
-          var previous = getPrevious(current);
-          var next = getNext(current);
-          var addZwj = ArabicShaping.addZwj;
-          var isArabicChar = ArabicShaping.isArabicChar;
-          if (false == isArabicChar(current.textContent)) {
-            return;
-          }
-          if (previous) {
-            var pchar = (getPrevious(previous) || {}).textContent;
-            var nchar = (getNext(previous) || {}).textContent;
-            previous.innerHTML = addZwj(previous.textContent, pchar, nchar);
-          }
-          if (current) {
-            var pchar = (getPrevious(current) || {}).textContent;
-            var nchar = (getNext(current) || {}).textContent;
-            current.innerHTML = addZwj(current.textContent, pchar, nchar);
-          }
-          if (next) {
-            var pchar = (getPrevious(next) || {}).textContent;
-            var nchar = (getNext(next) || {}).textContent;
-            next.innerHTML = addZwj(next.textContent, pchar, nchar);
-          }
+					let data = _this.editor.unbind()
+					console.log(data)
         },
         monitorOptions: {
           highlightProperties: true,
@@ -508,21 +478,9 @@
       this.editor.setLayerVisibility(layer.name, selected);
       return true;
     };
-    Model.counterClicked = function () {
-      var p = this.editor.createZeroPointProperty("counter");
-      var type = this.editor.propertyType.counter;
-      type.animation.init(p);
-      type.animation.start(p);
-    };
     Model.prototype.isActiveMode = function (mode) {
       var modes = this.currentModes();
       return modes.indexOf(mode) >= 0;
-    };
-    Model.prototype.spaceClicked = function () {
-      this.toggleAnnotation("space");
-    };
-    Model.prototype.pageClicked = function () {
-      this.editor.createProperty("page");
     };
     Model.prototype.toggleAnnotation = function (type) {
       if (this.isActiveMode(type)) {
@@ -531,9 +489,6 @@
       } else {
         this.editor.createProperty(type);
       }
-    };
-    Model.prototype.hyphenClicked = function () {
-      this.editor.createZeroPointProperty("hyphen");
     };
     Model.prototype.boldClicked = function () {
       this.toggleAnnotation("bold");
@@ -546,9 +501,6 @@
     };
     Model.prototype.superscriptClicked = function () {
       this.toggleAnnotation("superscript");
-    };
-    Model.prototype.expansionClicked = function () {
-      this.toggleAnnotation("expansion");
     };
     Model.prototype.subscriptClicked = function () {
       this.toggleAnnotation("subscript");
@@ -599,41 +551,19 @@
       this.editor.createProperty("concept");
     };
     Model.prototype.unbindClicked = function () {
-      var data = this.editor.unbind();
+			var data = this.editor.unbind();
       this.viewer(JSON.stringify(data));
     };
     Model.prototype.loadClicked = function () {
       var _this = this;
       var file = this.file();
       $.get(file, function (json) {
-        var blacklist = _this.blacklist();
-        if (blacklist) {
-          blacklist = blacklist.split(",").map((x) => x.trim());
-          json.properties = json.properties.filter(
-            (x) => blacklist.indexOf(x.type) == -1
-          );
-        }
-        // var containsArabic = (file.indexOf("arabic") >= 0); // A crude temporary check. We will check for a meta-data property later.
-        // if (containsArabic) {
-        //     _this.setupEditor({
-        //         container: _this.cloneNode(_this.container),
-        //         // monitor: _this.cloneNode(_this.monitor),
-        //         direction: "RTL",
-        //         interpolateZeroWidthJoiningCharacter: true
-        //     });
-        // } else {
-        //     _this.setupEditor({
-        //         container: _this.cloneNode(_this.container),
-        //         // monitor: _this.cloneNode(_this.monitor)
-        //     });
-        // }
         _this.setupEditor({
           container: _this.cloneNode(_this.container),
           // monitor: _this.cloneNode(_this.monitor)
         });
         _this.editor.bind(json);
         _this.viewer(null);
-        _this.startAnimations(_this.editor);
       });
     };
     Model.prototype.cloneNode = function (node) {
@@ -647,7 +577,6 @@
         text: data.text,
         properties: data.properties,
       });
-      this.startAnimations(this.editor);
     };
     return Model;
   })();
