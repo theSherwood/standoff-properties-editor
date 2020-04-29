@@ -27,13 +27,7 @@
                 case "metaRelation": return "<span class='output-metaRelation' data-type='metaRelation' data-guid='" + prop.value + "'>";
                 case "time": return "<span class='output-time' data-type='time' data-guid='" + prop.value + "'>";
                 case "lexeme": return "<span class='output-lexeme' data-type='lexeme' data-guid='" + prop.value + "'>";
-                case "syntax/tag": return "<span data-type='syntax/tag' data-lemma='" + prop.Lemma + "'>";                
-                case "tei/textstructure/opener": return "<span data-type='tei/textstructure/opener'>";
-                case "tei/textstructure/closer": return "<span data-type='tei/textstructure/closer'>";
-                case "tei/textstructure/salute": return "<span data-type='tei/textstructure/salute'>";
-                case "tei/textstructure/signed": return "<span data-type='tei/textstructure/signed'>";
-                case "tei/textstructure/dateline": return "<span data-type='tei/textstructure/dateline'>";
-                case "tei/core/date": return "<span data-type='tei/core/date'>";
+                case "syntax/tag": return "<span data-type='syntax/tag' data-lemma='" + prop.Lemma + "'>";
                 case "alignment/right": return "<div data-type='alignment/right' class='block-right'>";
                 case "alignment/left": return "<div data-type='alignment/left' class='block-left'>";
                 case "alignment/center": return "<div data-type='alignment/center' class='block-center'>";
@@ -64,12 +58,6 @@
                 case "time": return "</span>";
                 case "lexeme": return "</span>";
                 case "syntax/tag": return "</span>";
-                case "tei/textstructure/opener": return "</span>";
-                case "tei/textstructure/closer": return "</span>";
-                case "tei/textstructure/salute": return "</span>";
-                case "tei/textstructure/signed": return "</span>";
-                case "tei/textstructure/dateline": return "</span>";
-                case "tei/core/date": return "</span>";
                 case "alignment/right": return "</div>";
                 case "alignment/left": return "</div>";
                 case "alignment/center": return "</div>";
